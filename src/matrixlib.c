@@ -16,7 +16,7 @@ MatrixSU3 allocateSU3(void) {
 // Allocates a random SU(3) matrix
 MatrixSU3 allocateRandomSU3(const double epsilon) {
   MatrixSU3 matrix = (MatrixSU3) calloc (9, sizeof(double complex)); // calloc initialises to 0.
-  *(matrix) += uniform(-1,1) + 0. * I;
+  *(matrix + 0) += uniform(-1,1) + 0. * I;
   *(matrix + 1) += uniform(-1,1) + 0. * I;
   *(matrix + 2) += uniform(-1,1) + 0. * I;
   *(matrix + 3) =  *(matrix + 1) + 0. * I;
@@ -28,14 +28,14 @@ MatrixSU3 allocateRandomSU3(const double epsilon) {
   multiplyScalar(matrix, epsilon * I);
   MatrixSU3 identity = allocateSU3();
   add(matrix,identity);
+  free(identity);
   double det = determinant(matrix);
   multiplyScalar(matrix, cpow(1/det,1./3));
-  free(identity);
   return matrix;
 }
 
 // Print the matrix
-void printMatrixSU3(const MatrixSU3 matrix) {
+void printMatrix(const MatrixSU3 matrix) {
   size_t i = 0, j = 0;
   while (i < 3) {
     printf("(");
@@ -101,7 +101,7 @@ complex double determinant(const MatrixSU3 a) {
 MatrixSU3 invert(const MatrixSU3 matrix) {
   double det = determinant(matrix);
   MatrixSU3 inverse = (MatrixSU3) malloc (9 * sizeof(complex double));
-  *(inverse) = *(matrix+4) * *(matrix+8) - *(matrix+5) * *(matrix+7);
+  *(inverse + 0) = *(matrix+4) * *(matrix+8) - *(matrix+5) * *(matrix+7);
   *(inverse + 1) = *(matrix+2) * *(matrix+7) - *(matrix+1) * *(matrix+8);
   *(inverse + 2) = *(matrix+1) * *(matrix+5) - *(matrix+2) * *(matrix+4);
   *(inverse + 3) = *(matrix+5) * *(matrix+6) - *(matrix+3) * *(matrix+8);

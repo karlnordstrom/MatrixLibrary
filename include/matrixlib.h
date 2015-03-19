@@ -16,7 +16,7 @@ MatrixSU3 allocateSU3(void);
 MatrixSU3 allocateRandomSU3(const double epsilon);
 
 // Print the matrix supplied
-void printMatrixSU3(const MatrixSU3 matrix);
+void printMatrix(const MatrixSU3 matrix);
 
 // Multiply a by b, storing result in a, leaving b unchanged
 void multiply(MatrixSU3 a, const MatrixSU3 b);

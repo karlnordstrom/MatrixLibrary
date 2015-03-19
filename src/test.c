@@ -9,13 +9,13 @@ int main(void) {
   printf("Attempting to create a 3 by 3 matrix... \n");
 
   MatrixSU3 matrix1 = allocateRandomSU3(0.5);
-  printMatrixSU3(matrix1);
+  printMatrix(matrix1);
 
   MatrixSU3 inverse = invert(matrix1);
-  printMatrixSU3(inverse);
+  printMatrix(inverse);
 
   multiply(inverse, matrix1);
-  printMatrixSU3(inverse);
+  printMatrix(inverse);
 
   free(matrix1); free(inverse);
 
