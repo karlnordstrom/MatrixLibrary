@@ -16,21 +16,20 @@ MatrixSU3 allocateSU3(void) {
 // Allocates a random SU(3) matrix
 MatrixSU3 allocateRandomSU3(const double epsilon) {
   MatrixSU3 matrix = (MatrixSU3) calloc (9, sizeof(double complex)); // calloc initialises to 0.
-  *(matrix + 0) += uniform(-1,1) + 0. * I;
-  *(matrix + 1) += uniform(-1,1) + 0. * I;
-  *(matrix + 2) += uniform(-1,1) + 0. * I;
-  *(matrix + 3) =  *(matrix + 1) + 0. * I;
-  *(matrix + 4) += uniform(-1,1) + 0. * I;
-  *(matrix + 5) += uniform(-1,1) + 0. * I;
-  *(matrix + 6) =  *(matrix + 2) + 0. * I;
-  *(matrix + 7) =  *(matrix + 5) + 0. * I;
-  *(matrix + 8) += uniform(-1,1) + 0. * I;
+  *(matrix + 0) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 1) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 2) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 3) =  conj(*(matrix + 1)); // hermitian
+  *(matrix + 4) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 5) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 6) =  conj(*(matrix + 2));
+  *(matrix + 7) =  conj(*(matrix + 5));
+  *(matrix + 8) -= (*(matrix + 4) + *(matrix + 0)); // traceless
   multiplyScalar(matrix, epsilon * I);
   MatrixSU3 identity = allocateSU3();
   add(matrix,identity);
   free(identity);
-  double det = determinant(matrix);
-  multiplyScalar(matrix, cpow(1/det,1./3));
+  multiplyScalar(matrix, cpow(1/determinant(matrix),1./3));
   return matrix;
 }
 
