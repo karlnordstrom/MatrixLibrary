@@ -33,6 +33,34 @@ MatrixSU3 allocateRandomSU3(const double epsilon) {
   return matrix;
 }
 
+// Set matrix to identity
+void setIdentity(MatrixSU3 matrix) {
+  size_t i = 0;
+  while (i < 9) {
+    if(i == 0 || i == 4 || i == 8) *(matrix + i) = 1. + 0. * I;
+    else *(matrix + i) = 0. + 0. * I;
+    ++i;
+  }
+}
+
+// Sets matrix to a random SU(3) matrix
+void setRandomSU3(MatrixSU3 matrix, const double epsilon) {
+  *(matrix + 0) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 1) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 2) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 3) =  conj(*(matrix + 1)); // hermitian
+  *(matrix + 4) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 5) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 6) =  conj(*(matrix + 2));
+  *(matrix + 7) =  conj(*(matrix + 5));
+  *(matrix + 8) -= (*(matrix + 4) + *(matrix + 0)); // traceless
+  multiplyScalar(matrix, epsilon * I);
+  MatrixSU3 identity = allocateSU3();
+  add(matrix,identity);
+  free(identity);
+  multiplyScalar(matrix, cpow(1/determinant(matrix),1./3));
+}
+
 // Print the matrix
 void printMatrix(const MatrixSU3 matrix) {
   size_t i = 0, j = 0;
