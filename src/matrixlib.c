@@ -16,15 +16,15 @@ MatrixSU3 allocateSU3(void) {
 // Allocates a random SU(3) matrix
 MatrixSU3 allocateRandomSU3(const double epsilon) {
   MatrixSU3 matrix = (MatrixSU3) calloc (9, sizeof(double complex)); // calloc initialises to 0.
-  *(matrix + 0) += uniform(-1,1) + uniform(-1,1) * I;
-  *(matrix + 1) += uniform(-1,1) + uniform(-1,1) * I;
-  *(matrix + 2) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 0) = uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 1) = uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 2) = uniform(-1,1) + uniform(-1,1) * I;
   *(matrix + 3) =  conj(*(matrix + 1)); // hermitian
-  *(matrix + 4) += uniform(-1,1) + uniform(-1,1) * I;
-  *(matrix + 5) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 4) = uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 5) = uniform(-1,1) + uniform(-1,1) * I;
   *(matrix + 6) =  conj(*(matrix + 2));
   *(matrix + 7) =  conj(*(matrix + 5));
-  *(matrix + 8) -= (*(matrix + 4) + *(matrix + 0)); // traceless
+  *(matrix + 8) = - (*(matrix + 4) - *(matrix + 0)); // traceless
   multiplyScalar(matrix, epsilon * I);
   MatrixSU3 identity = allocateSU3();
   add(matrix,identity);
@@ -45,15 +45,15 @@ void setIdentity(MatrixSU3 matrix) {
 
 // Sets matrix to a random SU(3) matrix
 void setRandomSU3(MatrixSU3 matrix, const double epsilon) {
-  *(matrix + 0) += uniform(-1,1) + uniform(-1,1) * I;
-  *(matrix + 1) += uniform(-1,1) + uniform(-1,1) * I;
-  *(matrix + 2) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 0) = uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 1) = uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 2) = uniform(-1,1) + uniform(-1,1) * I;
   *(matrix + 3) =  conj(*(matrix + 1)); // hermitian
-  *(matrix + 4) += uniform(-1,1) + uniform(-1,1) * I;
-  *(matrix + 5) += uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 4) = uniform(-1,1) + uniform(-1,1) * I;
+  *(matrix + 5) = uniform(-1,1) + uniform(-1,1) * I;
   *(matrix + 6) =  conj(*(matrix + 2));
   *(matrix + 7) =  conj(*(matrix + 5));
-  *(matrix + 8) -= (*(matrix + 4) + *(matrix + 0)); // traceless
+  *(matrix + 8) = - (*(matrix + 4) - *(matrix + 0)); // traceless
   multiplyScalar(matrix, epsilon * I);
   MatrixSU3 identity = allocateSU3();
   add(matrix,identity);
@@ -137,5 +137,6 @@ MatrixSU3 invert(const MatrixSU3 matrix) {
   *(inverse + 6) = *(matrix+3) * *(matrix+7) - *(matrix+4) * *(matrix+6);
   *(inverse + 7) = *(matrix+1) * *(matrix+6) - *(matrix+0) * *(matrix+7);
   *(inverse + 8) = *(matrix+0) * *(matrix+4) - *(matrix+1) * *(matrix+3);
+  multiplyScalar(inverse, 1/det);
   return inverse;
 }
