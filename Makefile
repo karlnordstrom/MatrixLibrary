@@ -27,7 +27,7 @@ test.exe: ${SRCDIR}/test.c ${LIBDIR}/matrixlib.o ${LIBDIR}/mt64.o
 	${CC} ${CFLAGS} -o $@ $^ -I${INCDIR} -lm
 
 clean:
-	@rm ${LIBDIR}/matrixlib.o
 	@rm ${LIBDIR}/mt64.o
-	@rm ${LIBDIR}/libmatrix.o
+	@rm ${LIBDIR}/matrixlib.o
+	@rm ${LIBDIR}/libmatrix.so
 	@rm test.exe

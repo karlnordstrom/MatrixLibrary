@@ -19,6 +19,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../../Makefile" />
+		<Unit filename="../../include/matrixlib.h" />
+		<Unit filename="../../src/matrixlib.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../src/test.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<debugger />

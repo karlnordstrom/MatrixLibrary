@@ -8,8 +8,8 @@ double uniform(const double a, const double b) {
 // Allocates an SU(3) matrix set to identity by default
 MatrixSU3 allocateSU3(void) {
   MatrixSU3 matrix = (MatrixSU3) calloc (9, sizeof(double complex)); // calloc initialises to 0.
-  size_t i = 0;
-  while (i < 3) { *(matrix + 4*i) = 1. + 0. * I; ++i; }
+  short i = -1;
+  while (++i < 3) *(matrix + 4*i) = 1. + 0. * I;
   return matrix;
 }
 
@@ -26,20 +26,19 @@ MatrixSU3 allocateRandomSU3(const double epsilon) {
   *(matrix + 7) =  conj(*(matrix + 5));
   *(matrix + 8) = - (*(matrix + 4) - *(matrix + 0)); // traceless
   multiplyScalar(matrix, epsilon * I);
-  MatrixSU3 identity = allocateSU3();
-  add(matrix,identity);
-  free(identity);
+  *(matrix + 0) += 1.;
+  *(matrix + 4) += 1.;
+  *(matrix + 8) += 1.;
   multiplyScalar(matrix, cpow(1/determinant(matrix),1./3));
   return matrix;
 }
 
 // Set matrix to identity
 void setIdentity(MatrixSU3 matrix) {
-  size_t i = 0;
-  while (i < 9) {
+  short i = -1;
+  while (++i < 9) {
     if(i == 0 || i == 4 || i == 8) *(matrix + i) = 1. + 0. * I;
     else *(matrix + i) = 0. + 0. * I;
-    ++i;
   }
 }
 
@@ -55,67 +54,61 @@ void setRandomSU3(MatrixSU3 matrix, const double epsilon) {
   *(matrix + 7) =  conj(*(matrix + 5));
   *(matrix + 8) = - (*(matrix + 4) - *(matrix + 0)); // traceless
   multiplyScalar(matrix, epsilon * I);
-  MatrixSU3 identity = allocateSU3();
-  add(matrix,identity);
-  free(identity);
+  *(matrix + 0) += 1.;
+  *(matrix + 4) += 1.;
+  *(matrix + 8) += 1.;
   multiplyScalar(matrix, cpow(1/determinant(matrix),1./3));
 }
 
 // Print the matrix
 void printMatrix(const MatrixSU3 matrix) {
-  size_t i = 0, j = 0;
-  while (i < 3) {
+  short i = -1, j = -1;
+  while (++i < 3) {
     printf("(");
-    while(j < 3) {
+    while(++j < 3) {
       printf(" %.2f + %.2f i ", creal(*(matrix + 3*i + j)), cimag(*(matrix + 3*i + j)));
-      ++j;
     }
     printf(")\n");
-    j = 0;
-    ++i;
+    j = -1;
   }
 }
 
 // Multiply a by the matrix b, storing result in a, leaving b unchanged
 void multiply(MatrixSU3 a, const MatrixSU3 b) {
   double tmp[3];
-  size_t i = 0, j = 0;
-  while(i < 3) {
-    while(j < 3) { tmp[j] = *(a + 3*i) * *(b + j) + *(a + 3*i + 1) * *(b + 3 + j) + *(a + 3*i + 2) * *(b + 6 + j); ++j; }
-    j = 0;
-    while(j < 3) { *(a + 3*i + j) = tmp[j]; ++j; }
-    j = 0;
-    ++i;
+  short i = -1, j = -1;
+  while(++i < 3) {
+    while(++j < 3) tmp[j] = *(a + 3*i) * *(b + j) + *(a + 3*i + 1) * *(b + 3 + j) + *(a + 3*i + 2) * *(b + 6 + j);
+    j = -1;
+    while(++j < 3) *(a + 3*i + j) = tmp[j];
+    j = -1;
   }
 }
 
 // Multiply a by the number b
 void multiplyScalar(MatrixSU3 a, const double complex b) {
-  size_t i = 0, j = 0;
-  while(i < 3) {
-    while(j < 3) { *(a + 3*i + j) *= b; ++j; }
-    j = 0;
-    ++i;
+  short i = -1, j = -1;
+  while(++i < 3) {
+    while(++j < 3) *(a + 3*i + j) *= b;
+    j = -1;
   }
 }
 
 // Add a and b, storing result in a, leaving b unchanged
 void add(MatrixSU3 a, const MatrixSU3 b) {
-  size_t i = 0, j = 0;
-  while(i < 3) {
-    while(j < 3) { *(a + 3*i + j) += *(b + 3*i + j); ++j; }
-    j = 0;
-    ++i;
+  short i = -1, j = -1;
+  while(++i < 3) {
+    while(++j < 3) *(a + 3*i + j) += *(b + 3*i + j);
+    j = -1;
   }
 }
 
 // Subtract a and b, storing result in a, leaving b unchanged
 void subtract(MatrixSU3 a, const MatrixSU3 b) {
-  size_t i = 0, j = 0;
-  while(i < 3) {
-    while(j < 3) { *(a + 3*i + j) -= *(b + 3*i + j); ++j; }
-    j = 0;
-    ++i;
+  short i = -1, j = -1;
+  while(++i < 3) {
+    while(++j < 3) *(a + 3*i + j) -= *(b + 3*i + j);
+    j = -1;
   }
 }
 
