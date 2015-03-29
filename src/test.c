@@ -11,8 +11,10 @@ int main(void) {
   MatrixSU3 matrix1 = allocateRandomSU3(0.5);
   printMatrix(matrix1);
 
-  MatrixSU3 inverse = invert(matrix1);
+  MatrixSU3 inverse = conjugate(matrix1);
   printMatrix(inverse);
+  printf("%f + %fi \n", creal(determinant(matrix1)), cimag(determinant(matrix1)));
+  printf("%f + %fi \n", creal(determinant(inverse)), cimag(determinant(inverse)));
 
   multiply(inverse, matrix1);
   printMatrix(inverse);

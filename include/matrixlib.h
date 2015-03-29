@@ -41,3 +41,6 @@ complex double determinant(const MatrixSU3 a);
 
 // Return the inverse of matrix
 MatrixSU3 invert(const MatrixSU3 matrix);
+
+// Return the conjugate of matrix
+MatrixSU3 conjugate(const MatrixSU3 matrix);
