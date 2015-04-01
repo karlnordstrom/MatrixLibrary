@@ -111,7 +111,7 @@ void printMatrix(const MatrixSU3 matrix) {
 
 // Multiply a by the matrix b, storing result in a, leaving b unchanged
 void multiply(MatrixSU3 a, const MatrixSU3 b) {
-  double tmp[3];
+  double complex tmp[3];
   short i = -1, j = -1;
   while(++i < 3) {
     while(++j < 3) tmp[j] = *(a + 3*i) * *(b + j) + *(a + 3*i + 1) * *(b + 3 + j) + *(a + 3*i + 2) * *(b + 6 + j);
@@ -148,15 +148,15 @@ void subtract(MatrixSU3 a, const MatrixSU3 b) {
   }
 }
 
-// Return the inverse of matrix
-complex double determinant(const MatrixSU3 a) {
+// Return the determinant of matrix
+double complex determinant(const MatrixSU3 a) {
   return *(a) * (*(a+4) * *(a+8) - *(a+5) * *(a+7)) - *(a+1) * (*(a+3) * *(a+8) - *(a+5) * *(a+6)) + *(a+2) * (*(a+3) * *(a+7) - *(a+4) * *(a+6));
 }
 
 // Return the inverse of matrix
 MatrixSU3 invert(const MatrixSU3 matrix) {
   double det = determinant(matrix);
-  MatrixSU3 inverse = (MatrixSU3) malloc (9 * sizeof(complex double));
+  MatrixSU3 inverse = (MatrixSU3) malloc (9 * sizeof(double complex));
   *(inverse + 0) = *(matrix+4) * *(matrix+8) - *(matrix+5) * *(matrix+7);
   *(inverse + 1) = *(matrix+2) * *(matrix+7) - *(matrix+1) * *(matrix+8);
   *(inverse + 2) = *(matrix+1) * *(matrix+5) - *(matrix+2) * *(matrix+4);
@@ -171,7 +171,7 @@ MatrixSU3 invert(const MatrixSU3 matrix) {
 }
 
 MatrixSU3 conjugate(const MatrixSU3 matrix) {
-  MatrixSU3 conjugate = (MatrixSU3) malloc (9 * sizeof(complex double));
+  MatrixSU3 conjugate = (MatrixSU3) malloc (9 * sizeof(double complex));
   *(conjugate + 0) = conj(*(matrix + 0));
   *(conjugate + 1) = conj(*(matrix + 3));
   *(conjugate + 2) = conj(*(matrix + 6));

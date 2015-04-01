@@ -37,7 +37,7 @@ void add(MatrixSU3 a, const MatrixSU3 b);
 void subtract(MatrixSU3 a, const MatrixSU3 b);
 
 // Return the inverse of matrix
-complex double determinant(const MatrixSU3 a);
+double complex determinant(const MatrixSU3 a);
 
 // Return the inverse of matrix
 MatrixSU3 invert(const MatrixSU3 matrix);
