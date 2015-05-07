@@ -24,6 +24,9 @@ void setRandomSU3(MatrixSU3 matrix, const double epsilon);
 // Print the matrix supplied
 void printMatrix(const MatrixSU3 matrix);
 
+// Clone the matrix supplied
+MatrixSU3 cloneMatrix(const MatrixSU3 matrix);
+
 // Multiply a by b, storing result in a, leaving b unchanged
 void multiply(MatrixSU3 a, const MatrixSU3 b);
 
@@ -38,6 +41,9 @@ void subtract(MatrixSU3 a, const MatrixSU3 b);
 
 // Return the inverse of matrix
 double complex determinant(const MatrixSU3 a);
+
+// Return the trace of matrix
+double complex trace(const MatrixSU3 a);
 
 // Return the inverse of matrix
 MatrixSU3 invert(const MatrixSU3 matrix);

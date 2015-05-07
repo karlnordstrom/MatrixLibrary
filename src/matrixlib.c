@@ -8,8 +8,7 @@ double uniform(const double a, const double b) {
 // Allocates an SU(3) matrix set to identity by default
 MatrixSU3 allocateSU3(void) {
   MatrixSU3 matrix = (MatrixSU3) calloc (9, sizeof(double complex)); // calloc initialises to 0.
-  short i = -1;
-  while (++i < 3) *(matrix + 4*i) = 1. + 0. * I;
+  for(size_t i = 0; i < 3; ++i) *(matrix + 4*i) = 1. + 0. * I;
   return matrix;
 }
 
@@ -53,8 +52,7 @@ MatrixSU3 allocateRandomSU3(const double epsilon) {
 
 // Set matrix to identity
 void setIdentity(MatrixSU3 matrix) {
-  short i = -1;
-  while (++i < 9) {
+  for(size_t i = 0; i < 9; ++i) {
     if(i == 0 || i == 4 || i == 8) *(matrix + i) = 1. + 0. * I;
     else *(matrix + i) = 0. + 0. * I;
   }
@@ -98,53 +96,48 @@ void setRandomSU3(MatrixSU3 matrix, const double epsilon) {
 
 // Print the matrix
 void printMatrix(const MatrixSU3 matrix) {
-  short i = -1, j = -1;
-  while (++i < 3) {
+  for(size_t i = 0; i < 3; ++i) {
     printf("(");
-    while(++j < 3) {
+    for(size_t j = 0; j < 3; ++j) {
       printf(" %.2f + %.2f i ", creal(*(matrix + 3*i + j)), cimag(*(matrix + 3*i + j)));
     }
     printf(")\n");
-    j = -1;
   }
+}
+
+MatrixSU3 cloneMatrix(const MatrixSU3 matrix) {
+  MatrixSU3 out = (MatrixSU3) malloc (9 * sizeof(double complex));
+  for(size_t i = 0; i < 9; ++i) *(out + i) = *(matrix + i);
+  return out;
 }
 
 // Multiply a by the matrix b, storing result in a, leaving b unchanged
 void multiply(MatrixSU3 a, const MatrixSU3 b) {
   double complex tmp[3];
-  short i = -1, j = -1;
-  while(++i < 3) {
-    while(++j < 3) tmp[j] = *(a + 3*i) * *(b + j) + *(a + 3*i + 1) * *(b + 3 + j) + *(a + 3*i + 2) * *(b + 6 + j);
-    j = -1;
-    while(++j < 3) *(a + 3*i + j) = tmp[j];
-    j = -1;
+  for(size_t i = 0; i < 3; ++i) {
+    for(size_t j = 0; j < 3; ++j) tmp[j] = *(a + 3*i) * *(b + j) + *(a + 3*i + 1) * *(b + 3 + j) + *(a + 3*i + 2) * *(b + 6 + j);
+    for(size_t j = 0; j < 3; ++j) *(a + 3*i + j) = tmp[j];
   }
 }
 
 // Multiply a by the number b
 void multiplyScalar(MatrixSU3 a, const double complex b) {
-  short i = -1, j = -1;
-  while(++i < 3) {
-    while(++j < 3) *(a + 3*i + j) *= b;
-    j = -1;
+  for(size_t i = 0; i < 3; ++i) {
+    for(size_t j = 0; j < 3; ++j) *(a + 3*i + j) *= b;
   }
 }
 
 // Add a and b, storing result in a, leaving b unchanged
 void add(MatrixSU3 a, const MatrixSU3 b) {
-  short i = -1, j = -1;
-  while(++i < 3) {
-    while(++j < 3) *(a + 3*i + j) += *(b + 3*i + j);
-    j = -1;
+  for(size_t i = 0; i < 3; ++i) {
+    for(size_t j = 0; j < 3; ++j) *(a + 3*i + j) += *(b + 3*i + j);
   }
 }
 
 // Subtract a and b, storing result in a, leaving b unchanged
 void subtract(MatrixSU3 a, const MatrixSU3 b) {
-  short i = -1, j = -1;
-  while(++i < 3) {
-    while(++j < 3) *(a + 3*i + j) -= *(b + 3*i + j);
-    j = -1;
+  for(size_t i = 0; i < 3; ++i) {
+    for(size_t j = 0; j < 3; ++j) *(a + 3*i + j) -= *(b + 3*i + j);
   }
 }
 
@@ -153,9 +146,14 @@ double complex determinant(const MatrixSU3 a) {
   return *(a) * (*(a+4) * *(a+8) - *(a+5) * *(a+7)) - *(a+1) * (*(a+3) * *(a+8) - *(a+5) * *(a+6)) + *(a+2) * (*(a+3) * *(a+7) - *(a+4) * *(a+6));
 }
 
+// Return the trace of matrix
+double complex trace(const MatrixSU3 a) {
+  return *(a) + *(a+4) + *(a+8);
+}
+
 // Return the inverse of matrix
 MatrixSU3 invert(const MatrixSU3 matrix) {
-  double det = determinant(matrix);
+  double complex det = determinant(matrix);
   MatrixSU3 inverse = (MatrixSU3) malloc (9 * sizeof(double complex));
   *(inverse + 0) = *(matrix+4) * *(matrix+8) - *(matrix+5) * *(matrix+7);
   *(inverse + 1) = *(matrix+2) * *(matrix+7) - *(matrix+1) * *(matrix+8);
